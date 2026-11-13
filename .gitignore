@@ -1,0 +1,32 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Django and database
+.env
+.env.*
+!.env.example
+*.sqlite3
+*.log
+media/
+
+# React
+node_modules/
+dist/
+build/
+coverage/
+
+# Android
+.gradle/
+.idea/
+local.properties
+*.apk
+*.aab
+**/build/
+
+# System
+.DS_Store
+Thumbs.db
