@@ -3,30 +3,31 @@ venv/
 .venv/
 __pycache__/
 *.pyc
-.pytest_cache/
 
-# Django and database
+# Django secrets
 .env
 .env.*
 !.env.example
 *.sqlite3
 *.log
-media/
+
+# Sensitive keys
+*.pem
+*.key
+*.jks
+*.keystore
 
 # React
 node_modules/
 dist/
 build/
-coverage/
 
 # Android
 .gradle/
 .idea/
 local.properties
-*.apk
-*.aab
 **/build/
 
-# System
+# System files
 .DS_Store
 Thumbs.db
