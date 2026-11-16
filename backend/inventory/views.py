@@ -6,6 +6,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from config.permissions import IsInventoryAdminOrStaff
+
 from products.models import Product
 from products.serializers import ProductSerializer
 
@@ -27,7 +29,7 @@ from .services import adjust_stock
     description="Add stock to an existing product.",
 )
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsInventoryAdminOrStaff])
 def stock_in(request):
     serializer = StockAdjustmentSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -58,7 +60,7 @@ def stock_in(request):
     description="Remove stock from an existing product.",
 )
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsInventoryAdminOrStaff])
 def stock_out(request):
     serializer = StockAdjustmentSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -90,7 +92,10 @@ class StockMovementListView(generics.ListAPIView):
     ).all()
 
     serializer_class = StockMovementSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        IsInventoryAdminOrStaff
+    ]
 
 
 # ==========================================
@@ -104,4 +109,7 @@ class LowStockListView(generics.ListAPIView):
     ).select_related("category")
 
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+        IsAuthenticated,
+        IsInventoryAdminOrStaff
+    ]

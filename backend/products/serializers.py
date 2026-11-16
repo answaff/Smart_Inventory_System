@@ -36,6 +36,31 @@ class ProductSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+
+    def validate_stock_quantity(self, value):
+        # Reject direct stock updates to existing products
+        if self.instance is not None:
+            raise serializers.ValidationError(
+                "Stock quantity cannot be updated through "
+                "the Product API. Use Inventory Management."
+            )
+
+        # New products must start with zero stock
+        if value != 0:
+            raise serializers.ValidationError(
+                "Initial stock must be 0. "
+                "Use Stock-In to add inventory."
+            )
+
+        return value
+
+    def create(self, validated_data):
+        # Always initialize new products with zero stock
+        validated_data["stock_quantity"] = 0
+
+        return super().create(validated_data)
+
+
     def validate_price(self, value):
         if value < 0:
             raise serializers.ValidationError(

@@ -1,12 +1,16 @@
+
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
 from drf_spectacular.utils import extend_schema
+
+from config.permissions import IsInventoryAdminOrStaff
 
 from .models import Order
 from .serializers import OrderSerializer, OrderCreateSerializer
-from .services import create_order, cancel_order
+from .services import create_order, cancel_order, complete_order
 
 
 class OrderViewSet(
@@ -24,13 +28,27 @@ class OrderViewSet(
     ).order_by("-created_at")
 
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+
+    # Inventory Admin and Staff permissions
+    permission_classes = [
+        IsAuthenticated,
+        IsInventoryAdminOrStaff
+    ]
+
+    # -----------------------------------
+    # SELECT SERIALIZER
+    # -----------------------------------
 
     def get_serializer_class(self):
+
         if self.action == "create":
             return OrderCreateSerializer
 
         return OrderSerializer
+
+    # -----------------------------------
+    # CREATE ORDER
+    # -----------------------------------
 
     @extend_schema(
         request=OrderCreateSerializer,
@@ -56,14 +74,56 @@ class OrderViewSet(
             status=status.HTTP_201_CREATED
         )
 
+    # -----------------------------------
+    # CANCEL ORDER
+    # -----------------------------------
+
     @extend_schema(
         request=None,
         responses={200: OrderSerializer}
     )
-    @action(detail=True, methods=["post"], url_path="cancel")
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="cancel"
+    )
     def cancel(self, request, pk=None):
 
         order = cancel_order(
+            order_id=pk,
+            user=request.user
+        )
+
+        serializer = OrderSerializer(
+            order,
+            context=self.get_serializer_context()
+        )
+
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK
+        )
+
+    # -----------------------------------
+    # COMPLETE ORDER
+    # -----------------------------------
+
+    @extend_schema(
+        request=None,
+        responses={200: OrderSerializer}
+    )
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path="complete",
+        permission_classes=[
+            IsAuthenticated,
+            IsInventoryAdminOrStaff
+        ]
+    )
+    def complete(self, request, pk=None):
+
+        order = complete_order(
             order_id=pk,
             user=request.user
         )

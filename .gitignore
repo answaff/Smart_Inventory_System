@@ -1,33 +1,52 @@
-# Python
-venv/
-.venv/
-__pycache__/
-*.pyc
-
-# Django secrets
-.env
-.env.*
-!.env.example
+$ignoreRules = @'
+# Python and Django
+**/venv/
+**/.venv/
+**/__pycache__/
+*.py[cod]
 *.sqlite3
 *.log
 
-# Sensitive keys
+# Environment variables and secrets
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
 *.pem
 *.key
-*.jks
-*.keystore
 
-# React
-node_modules/
-dist/
-build/
-
-# Android
-.gradle/
-.idea/
-local.properties
+# React and React Native
+**/node_modules/
+**/.expo/
+**/dist/
 **/build/
+**/.next/
 
-# System files
+# Database backups and archives
+*.sql
+*.sql.gz
+*.bak
+*.zip
+
+# Local editor files
+.vscode/
+.idea/
 .DS_Store
-Thumbs.db
+'@
+
+if (Test-Path ".gitignore") {
+    Add-Content -Path ".gitignore" -Value $ignoreRules
+} else {
+    Set-Content -Path ".gitignore" -Value $ignoreRules
+}
+
+Write-Host "SUCCESS: Git ignore rules configured." -ForegroundColor Green
+# Django deployment files
+backend/staticfiles/
+backend/config/settings*.bak
+backend/config/settings.backup.py
+backend/.env*
+**/settings.backup.py
+**/settings*.bak

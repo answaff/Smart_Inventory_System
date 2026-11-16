@@ -10,10 +10,11 @@ from drf_spectacular.utils import extend_schema
 from products.models import Product
 from customers.models import Customer
 from orders.models import Order
+from config.permissions import IsInventoryAdminOrStaff
 
 
 class DashboardSummaryView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsInventoryAdminOrStaff]
 
     @extend_schema(
         summary="Dashboard summary",
