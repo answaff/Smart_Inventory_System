@@ -11,7 +11,7 @@ A full-stack inventory and order management application with a responsive React 
 | Web application | [Smart Inventory on Vercel](https://smart-inventory-system-eta.vercel.app) |
 | REST API | [Render API base](https://smart-inventory-api-pin2.onrender.com/api/) |
 | Android APK | [Expo EAS preview build](https://expo.dev/accounts/answaff/projects/mobile-react-native/builds/6b70b8bc-3aa9-4d55-b8c4-a3560f6167ae) |
-| API documentation | Verify the deployed Swagger URL (commonly `/api/docs/`) before adding a public link |
+| API documentation | [Swagger UI](https://smart-inventory-api-pin2.onrender.com/api/docs/) |
 | ER diagram | [ER_DIAGRAM.md](ER_DIAGRAM.md) and [ER_DIAGRAM.png](ER_DIAGRAM.png) |
 | Project structure | [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) |
 
